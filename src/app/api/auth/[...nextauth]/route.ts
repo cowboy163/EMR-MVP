@@ -1,1 +1,1 @@
-// auth route
+export { GET, POST } from "@/auth"

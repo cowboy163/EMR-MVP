@@ -1,7 +1,8 @@
 import React from 'react'
+import LoginForm from './LoginForm'
 
 export default function PatientLoginPage() {
     return (
-        <div>patient login page</div>
+        <LoginForm />
     )
 }
