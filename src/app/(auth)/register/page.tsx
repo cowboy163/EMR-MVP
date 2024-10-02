@@ -1,8 +1,8 @@
 import React from 'react'
-import RegisterForm from './RegisterForm'
+import RegisterCard from './RegisterCard'
 
 export default function PatientRegisterPage() {
     return (
-        <RegisterForm />
+        <RegisterCard />
     )
 }

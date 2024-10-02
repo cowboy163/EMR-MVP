@@ -1,12 +1,14 @@
 'use server'
 
-import { signIn } from "@/auth";
+import { auth, signIn, signOut } from "@/auth";
 import { prisma } from "@/lib/prisma"
 import { LoginSchema } from "@/lib/schemas/loginSchema";
 import { registerSchema, RegisterSchema } from "@/lib/schemas/registerSchema";
 import { User } from "@prisma/client";
 import bcrypt from "bcryptjs"
 import { AuthError } from "next-auth";
+
+export type RoleType = 'DOCTOR' | 'PATIENT'
 
 export async function getUserByEmail(email: string) {
     return prisma.user.findUnique({
@@ -20,8 +22,22 @@ export async function getUserById(id: string) {
     })
 }
 
-export async function signInUser(data: LoginSchema): Promise<ActionResult<string>> {
+export async function getAuthUserId() {
+    const session = await auth();
+    const userId = session?.user?.id;
+    if (!userId) throw new Error('Unauthorised')
+    return userId
+}
+
+export async function signInUser(data: LoginSchema, rolePlatform: RoleType = 'PATIENT'): Promise<ActionResult<string>> {
     try {
+        const existingUser = await getUserByEmail(data.email);
+
+        const isInvalidUser = !existingUser || !existingUser.email;
+        const isInvalidRole = rolePlatform !== existingUser?.role
+
+        if (isInvalidUser || isInvalidRole) return { status: 'error', error: 'Invalid credentials' }
+
         const result = await signIn('credentials', {
             email: data.email,
             password: data.password,
@@ -46,7 +62,7 @@ export async function signInUser(data: LoginSchema): Promise<ActionResult<string
     }
 }
 
-export async function registerUser(data: RegisterSchema): Promise<ActionResult<User>> {
+export async function registerUser(data: RegisterSchema, rolePlatform: RoleType = 'PATIENT'): Promise<ActionResult<User>> {
     try {
         const validated = registerSchema.safeParse(data);
 
@@ -68,7 +84,8 @@ export async function registerUser(data: RegisterSchema): Promise<ActionResult<U
             data: {
                 name,
                 email,
-                passwordHash: hashedPassword
+                passwordHash: hashedPassword,
+                role: rolePlatform
             }
         })
 
@@ -78,4 +95,10 @@ export async function registerUser(data: RegisterSchema): Promise<ActionResult<U
         return { status: 'error', error: "Something went wrong" }
     }
 
+}
+
+export async function signOutUser() {
+    await signOut({
+        redirectTo: '/'
+    });
 }
