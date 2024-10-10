@@ -39,13 +39,30 @@ async function insertSeedMembersData(data: SeedMemberDataType[], role: RoleType)
                     city: member.city,
                     country: member.country,
                     image: member.image,
+                    role,
                     photos: {
                         create: {
                             url: member.image
                         }
-                    }
+                    },
+                    doctor: role === 'DOCTOR' ? {
+                        create: {
+                            field: "Eye Care",
+                            user: {
+                                connect: { email: member.email }
+                            }
+                        }
+                    } : undefined,
+                    patient: role === 'PATIENT' ? {
+                        create: {
+                            medicalHistory: "Red eye",
+                            user: {
+                                connect: { email: member.email }
+                            }
+                        }
+                    } : undefined
                 }
-            }
+            },
         }
     }))
 }

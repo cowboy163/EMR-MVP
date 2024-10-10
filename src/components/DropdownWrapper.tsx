@@ -24,7 +24,7 @@ export type DropdownWrapperProps = {
     placement?: OverlayPlecement
 }
 
-export const DropdownWrapper = ({ trigger, dropdownMenu, placement="bottom-end" }: DropdownWrapperProps) => {
+export const DropdownWrapper = ({ trigger, dropdownMenu, placement = "bottom-end" }: DropdownWrapperProps) => {
     const { ariaLable, readOnlySection, dropItems } = dropdownMenu
     return (
         <Dropdown placement={placement}>
@@ -37,7 +37,7 @@ export const DropdownWrapper = ({ trigger, dropdownMenu, placement="bottom-end" 
             </DropdownTrigger>
             <DropdownMenu variant='flat' aria-label={ariaLable}>
                 <DropdownSection showDivider hidden={!readOnlySection}>
-                    <DropdownItem isReadOnly as='span' className='h-14 flex flex-row' aria-label={readOnlySection?.ariaLabel}>
+                    <DropdownItem isReadOnly as='span' className='h-14 flex flex-row' aria-label={readOnlySection?.ariaLabel} textValue="avatar area">
                         {readOnlySection?.label}
                     </DropdownItem>
                 </DropdownSection>

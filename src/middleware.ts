@@ -1,40 +1,46 @@
 import { NextResponse } from "next/server";
 import { auth } from "./auth";
-import { authRoutes, doctorRoutes, publicRoutes } from "./routes";
+import { authRoutes, publicRoutes } from "./routes";
 
 export default auth((req) => {
     const {nextUrl} = req;
     const isLoggedIn = !!req.auth;
 
-    const isPublic = publicRoutes.includes(nextUrl.pathname)
+    const isPublicRoute = publicRoutes.includes(nextUrl.pathname)
     const isAuthRoute = authRoutes.includes(nextUrl.pathname)
-
+    const isPatientRoute = nextUrl.pathname.startsWith('/portal')
+    const isDoctorRoute = nextUrl.pathname.startsWith('/doctor-portal')
+    
     const isDoctor = req.auth?.user.role === 'DOCTOR';
-    const isDoctorRoute = doctorRoutes.includes(nextUrl.pathname)
+    const isPatient = req.auth?.user.role === 'PATIENT';    
 
-    if (isPublic) {
+    if (isPublicRoute) {
         return NextResponse.next()
-    }
-
-    if (isDoctorRoute && !isDoctor) {
-        return NextResponse.redirect(new URL('/', nextUrl));
     }
 
     if (isAuthRoute) {
         if(isLoggedIn) {
-            return NextResponse.redirect(new URL('/doctors', nextUrl))
+            if(isDoctor) return NextResponse.redirect(new URL('/doctor-portal', nextUrl))
+            if(isPatient) return NextResponse.redirect(new URL('/portal', nextUrl))            
         }
         return NextResponse.next()
     }
 
-    if (!isDoctorRoute && !isPublic && !isLoggedIn) {
+    if (isDoctorRoute && !isLoggedIn) {
+        return NextResponse.redirect(new URL('/doctor-login', nextUrl))
+    }
+
+    if (isPatientRoute && !isLoggedIn) {
         return NextResponse.redirect(new URL('/login', nextUrl))
+    }
+
+    if ((isDoctorRoute && !isDoctor) || (isPatientRoute && !isPatient)) {
+        return NextResponse.redirect(new URL('/', nextUrl));
     }
 
     return NextResponse.next();
 })
 
-// 配置哪些路径不会被中间件影响
 export const config = {
     matcher: ['/((?!api|_next/static|_next/image|images|favicon.ico).*)']
 }
