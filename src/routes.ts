@@ -11,9 +11,5 @@ export const authRoutes:string[] = [
     '/reset-password',
     '/doctor-login',
     '/doctor-register',
-    '/doctor-register/success'
-]
-
-export const doctorRoutes:string[] = [
-    
+    '/doctor-register/success',
 ]

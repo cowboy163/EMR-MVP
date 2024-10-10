@@ -12,22 +12,39 @@ import RegisterMenu from './RegisterMenu';
 export default async function TopNav() {
     const session = await auth();
     const userInfo = session?.user && await getUserInfoForNav();
+    
 
     const patientLinks = [
         {
-            href: '/doctors',
+            href: '/portal',
+            label: 'Home'
+        },
+        {
+            href: '/portal/doctors',
             label: 'Doctors'
         },
         {
-            href: '/messages',
+            href: '/portal/saved-doctors',
+            label: 'Saved Doctors'
+        },
+        {
+            href: '/portal/messages',
             label: 'Messages'
         },
     ]
 
     const doctorLinks = [
         {
-            href: '/doctor/moderation',
-            label: 'DOCTOR MODERATION'
+            href: '/doctor-portal',
+            label: 'Home'
+        },
+        {
+            href: '/doctor-portal/saved-patients',
+            label: 'Saved Patients'
+        },
+        {
+            href: '/doctor-portal/messages',
+            label: 'Messages'
         },
     ]
 
@@ -53,7 +70,7 @@ export default async function TopNav() {
                     <span className='text-gray-200'>clinic</span>
                 </div>
             </NavbarBrand>
-            <NavbarContent justify='center' className='text-gray-200'>
+            <NavbarContent justify='center' className='text-gray-200 gap-8'>
                 {
                     session && links.map(item => (
                         <NavLink href={item.href} key={item.href} label={item.label} />
@@ -63,7 +80,7 @@ export default async function TopNav() {
             <NavbarContent justify='end'>
                 {
                     session?.user ? (
-                        <UserMenu userInfo={userInfo} />
+                        <UserMenu userInfo={userInfo} rolePlatform={session.user.role}/>
                     ) : (
                         <Fragment>
                             <LoginMenu />

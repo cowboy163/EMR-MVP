@@ -21,7 +21,12 @@ export default function LoginForm({ rolePlatform = 'PATIENT' }: Props) {
     const onSubmit = async (data: LoginSchema) => {
         const result = await signInUser(data, rolePlatform)
         if (result.status === 'success') {
-            router.push("/");
+            if(rolePlatform === 'PATIENT') {
+                router.push("/portal");
+            }
+            if(rolePlatform === 'DOCTOR') {
+                router.push("/doctor-portal")
+            }
             router.refresh();
         } else {
             toast.error(result.error as string)
