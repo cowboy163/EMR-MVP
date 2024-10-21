@@ -5,11 +5,10 @@ import { prisma } from "@/lib/prisma"
 import { LoginSchema } from "@/lib/schemas/loginSchema";
 import { registerSchema, RegisterSchema } from "@/lib/schemas/registerSchema";
 import { ActionResult } from "@/types";
+import { RoleType } from "@/types/constantsType";
 import { User } from "@prisma/client";
 import bcrypt from "bcryptjs"
 import { AuthError } from "next-auth";
-
-export type RoleType = 'DOCTOR' | 'PATIENT'
 
 export async function getUserByEmail(email: string) {
     return prisma.user.findUnique({

@@ -1,4 +1,5 @@
 "use client";
+import { useSelector } from '@/lib/redux';
 import { NavbarItem } from '@nextui-org/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation';
@@ -9,10 +10,9 @@ type Props = {
     label: string;
 }
 
-const unreadCount = 0
-
 export default function NavLink({ href, label }: Props) {
     const pathname = usePathname();
+    const unreadCount = useSelector(state => state.message.unreadCount);
 
     return (
         <NavbarItem isActive={pathname === href} as={Link} href={href}>
@@ -20,8 +20,8 @@ export default function NavLink({ href, label }: Props) {
                 {label}
             </span>
             {
-                // 当message为0的时候，不显示0
-                href === '/messages' && unreadCount > 0 && (
+                // not display count when it is 0
+                href.endsWith('/messages') && unreadCount > 0 && (
                     <span
                         className='ml-1'
                     >

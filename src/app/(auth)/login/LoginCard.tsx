@@ -1,5 +1,5 @@
-import CardWrapper from '@/components/CardWrapper'
 import LoginForm from '@/components/forms/LoginForm'
+import CardWrapper from '@/components/wrappers/CardWrapper'
 import React from 'react'
 import { GiPadlock } from 'react-icons/gi'
 

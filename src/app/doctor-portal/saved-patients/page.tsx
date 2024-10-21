@@ -1,6 +1,6 @@
 import React from 'react'
 import { fetchCurrentUserLikeIds, fetchLikedMembers } from '@/app/actions/likeActions';
-import ListsTab from '@/components/portal/ListsTab';
+import ListsTab from '@/components/tabs/ListsTab';
 
 export default async function SavedDoctorsPage({ searchParams }: { searchParams: { type: string } }) {
     const likeIds = await fetchCurrentUserLikeIds();

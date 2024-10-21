@@ -1,6 +1,6 @@
 'use client'
 
-import CardWrapper from '@/components/CardWrapper';
+import CardWrapper from '@/components/wrappers/CardWrapper';
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { FaCheckCircle } from 'react-icons/fa';

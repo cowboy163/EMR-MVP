@@ -1,10 +1,10 @@
-import { getMemberDoctorPhotosByUserId } from '@/app/actions/patientActions'
-import CardInnerWrapper from '@/components/CardInnerWrapper'
+import { getMemberPhotosByUserId } from '@/app/actions/memberActions'
+import CardInnerWrapper from '@/components/wrappers/CardInnerWrapper'
 import { Image } from '@nextui-org/react'
 import React from 'react'
 
 export default async function PhotosPage({ params }: { params: { userId: string } }) {
-    const photos = await getMemberDoctorPhotosByUserId(params.userId)
+    const photos = await getMemberPhotosByUserId({userId: params.userId, role: 'DOCTOR'})
     return (
         <CardInnerWrapper
             header={'Photos'}

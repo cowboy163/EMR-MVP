@@ -4,9 +4,9 @@ import { Key } from '@react-types/shared';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import React, { useTransition } from 'react'
-import MemberCard from '@/components/MemberCard';
 import { Member } from '@prisma/client';
-import { RoleType } from '@/app/actions/authActions';
+import MemberCard from '../member/MemberCard';
+import { RoleType } from '@/types/constantsType';
 
 type Props = {
     members: Member[];
@@ -45,6 +45,7 @@ export default function ListsTab({ members, likeIds, rolePlatform }: Props) {
             const params = new URLSearchParams(searchParams);
             params.set('type', key.toString());
             router.replace(`${pathname}?${params.toString()}`)
+            router.refresh();
         })
     }
 

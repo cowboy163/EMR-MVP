@@ -6,7 +6,8 @@ import { handleFormServerErrors } from '@/lib/util'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Input } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
-import { registerUser, RoleType } from '@/app/actions/authActions'
+import { registerUser } from '@/app/actions/authActions'
+import { RoleType } from '@/types/constantsType'
 
 type Props = {
     rolePlatform?: RoleType

@@ -3,12 +3,12 @@ import React, { ReactNode } from 'react'
 
 import { notFound } from 'next/navigation'
 import { Card } from '@nextui-org/react';
-import { getMemberDoctorByUserId } from '@/app/actions/patientActions';
-import MemberSidebar from '@/components/MemberSidebar';
+import { getMemberByUserId } from '@/app/actions/memberActions';
+import MemberSidebar from '@/components/member/MemberSidebar';
 
 export default async function Layout({ children, params }: { children: ReactNode, params: { userId: string } }) {
 
-    const doctor = await getMemberDoctorByUserId(params.userId);
+    const doctor = await getMemberByUserId({userId: params.userId, role: 'DOCTOR'});
     if (!doctor) return notFound();
 
     const basePath = `/portal/doctors/${doctor.userId}`;

@@ -1,4 +1,4 @@
-import CardInnerWrapper from '@/components/CardInnerWrapper'
+import CardInnerWrapper from '@/components/wrappers/CardInnerWrapper'
 import React from 'react'
 
 export default function BookingPage() {
