@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { hash } from "bcryptjs";
 import { doctorsData, patientsData } from "./membersData";
-import { RoleType } from "@/app/actions/authActions";
+import { RoleType } from "@/types/constantsType";
 
 export type SeedMemberDataType = {
     email: string,

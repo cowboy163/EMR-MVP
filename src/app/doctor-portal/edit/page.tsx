@@ -1,31 +1,23 @@
-import { getAuthUserId } from '@/app/actions/authActions';
-import { getMemberByUserId } from '@/app/actions/doctorActions';
-import MemberSidebar from '@/components/MemberSidebar';
-import { Card } from '@nextui-org/react';
+import { CardBody, CardHeader, Divider } from '@nextui-org/react'
+import React from 'react'
 import { notFound } from 'next/navigation';
-import React, { ReactNode } from 'react'
+import { getAuthUserId } from '@/app/actions/authActions';
+import { getMemberByUserId } from '@/app/actions/memberActions';
+import DoctorEditForm from '@/components/forms/DoctorEditForm';
 
-export default async function DoctorPortalEditPage({children}: {children: ReactNode}) {
-    const userId = await getAuthUserId();
-    const member = await getMemberByUserId(userId);
-    if (!member) return notFound();
-
-    const basePath = `/doctor-portal/edit`
-
-    const navLinks = [
-        { name: "Edit Profile", href: `${basePath}` },
-        { name: "Update Photos", href: `${basePath}/photos` },
-    ]
+export default async function DoctorEditPage() {
+  const userId = await getAuthUserId();
+  const member = await getMemberByUserId({userId});
+  if (!member) return notFound();
   return (
-    <div className='grid grid-cols-12 gap-5 h-[80vh]'>
-    <div className='col-span-3'>
-        <MemberSidebar member={member} navLinks={navLinks}/>
-    </div>
-    <div className='col-span-9'>
-        <Card className='w-full mt-10 h-[80vh]'>
-            {children}
-        </Card>
-    </div>
-</div>
+      <>
+          <CardHeader className='text-2xl font-semibold text-primary'>
+              Edit Profile
+          </CardHeader>
+          <Divider />
+          <CardBody>
+              <DoctorEditForm member={member} />
+          </CardBody>
+      </>
   )
 }

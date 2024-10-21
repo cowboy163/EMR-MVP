@@ -1,5 +1,5 @@
 import { FaPerson, FaUserDoctor } from "react-icons/fa6";
-import { DropdownWrapper, DropdownWrapperProps } from "../DropdownWrapper";
+import { DropdownWrapper, DropdownWrapperProps } from "../wrappers/DropdownWrapper";
 
 
 const dropdownMenu:DropdownWrapperProps = {

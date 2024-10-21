@@ -1,6 +1,7 @@
 'use client'
-import { RoleType, signInUser } from '@/app/actions/authActions'
+import { signInUser } from '@/app/actions/authActions'
 import { loginSchema, LoginSchema } from '@/lib/schemas/loginSchema'
+import { RoleType } from '@/types/constantsType'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Input } from '@nextui-org/react'
 import Link from 'next/link'
