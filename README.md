@@ -7,13 +7,13 @@ An online platform for doctors to manage appointments, handle medical records, a
 - [Introduction](#introduction)
 - [Features](#features)
 - [Installation](#installation)
-- [About Seed Data](#About Seed Data)
+- [About Seed Data](#About-Seed-Data)
 - [Usage](#usage)
 - [Configuration](#configuration)
 - [Technologies Used](#technologies-used)
 - [Author](#author)
 - [Acknowledgments](#acknowledgments)
-- [Deploy on Vercel](#Deploy on Vercel)
+- [Deploy on Vercel](#Deploy-on-Vercel)
 
 ## Introduction
 
