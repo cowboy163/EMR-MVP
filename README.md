@@ -115,7 +115,7 @@ $ npx prisma studio
 $ npx prisma db push
 
 # clean database
-$ npx prisma migrate reset
+$ npx prisma migrate reset --skip-seed
 ~~~
 
 
