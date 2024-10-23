@@ -11,7 +11,7 @@ import { Channel } from "pusher-js"
 import { useCallback, useEffect, useRef } from "react"
 import { toast } from "react-toastify";
 
-export const useNotificationChannel = (userId: string | null, role: RoleType | null) => {
+export const useNotificationChannel = (userId: string | null, role: RoleType | null, profileComplete: boolean) => {
     const channelRef = useRef<Channel | null>(null);
     const dispatch = useDispatch();
     const pathname = usePathname();
@@ -40,7 +40,7 @@ export const useNotificationChannel = (userId: string | null, role: RoleType | n
     }, [role]);
 
     useEffect(() => {
-        if (!userId) return;
+        if (!userId || !profileComplete) return;
         if (!channelRef.current) {
             channelRef.current = pusherClient.subscribe(`${EVENT_ID_TYPES.PRIVATE}-${userId}`);
             channelRef.current.bind(EVENT_TYPES.NEW_MESSAGE, handleNewMessage);
@@ -55,5 +55,5 @@ export const useNotificationChannel = (userId: string | null, role: RoleType | n
                 channelRef.current = null;
             }
         }
-    }, [userId, handleNewMessage, handleNewLike])
+    }, [userId, handleNewMessage, handleNewLike, profileComplete])
 }

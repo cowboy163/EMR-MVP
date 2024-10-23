@@ -10,12 +10,14 @@ import React, { ReactNode, useCallback, useEffect, useRef } from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-export default function Providers({ children, userId, role }: { children: ReactNode, userId: string | null, role: RoleType | null }) {
+export default function Providers({ children, userId, role, profileComplete }: { children: ReactNode, userId: string | null, role: RoleType | null, profileComplete: boolean }) {
   // use ref to avoid double trigger in restrict mode
   const isUnreadCountSet = useRef(false);
   const dispatch = useDispatch();
-  usePresenceChannel();
-  useNotificationChannel(userId, role);
+
+  // use userId to verify use presence channel or not to avoid 401 error
+  usePresenceChannel(userId, profileComplete);
+  useNotificationChannel(userId, role, profileComplete);
 
   const setUnreadCount = useCallback((amount: number) => {
     dispatch(messageSlice.actions.updateUnreadCount(amount))

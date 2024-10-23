@@ -18,11 +18,12 @@ export default async function RootLayout({
   const session = await auth();
   const userId = session?.user?.id || null;
   const role = session?.user?.role || null;
+  const profileComplete = session?.user.profileComplete as boolean
   return (
     <ReduxProviders>
       <html lang="en">
         <body>
-          <Providers userId={userId} role={role}>
+          <Providers userId={userId} role={role} profileComplete={profileComplete}>
             <TopNav />
             <main className="container mx-auto">
               {children}

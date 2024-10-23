@@ -17,7 +17,7 @@ type Props = {
 
 export default function MemberCard({ member, likeIds, rolePlatform }: Props) {
     const [hasLiked, setHasLiked] = useState(likeIds?.includes(member.userId));
-    // const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const baseLink = getBaseLinkBasedOnRolePlatform(rolePlatform);
     const getLink = () => {
@@ -27,13 +27,13 @@ export default function MemberCard({ member, likeIds, rolePlatform }: Props) {
 
     async function toggleLike() {
         try {
-            // setLoading(true);
+            setLoading(true);
             await toggleLikeMember(member.userId, hasLiked);
             setHasLiked(!hasLiked)
         } catch (error) {
             console.log(error)
         } finally {
-            // setLoading(false);
+            setLoading(false);
         }
     }
 
@@ -58,7 +58,7 @@ export default function MemberCard({ member, likeIds, rolePlatform }: Props) {
             />
             <div onClick={preventLinkAction}>
                 <div className='absolute top-3 right-3 z-50'>
-                    <LikeButton toggleLike={toggleLike} hasLiked={hasLiked} />
+                    <LikeButton loading={loading} toggleLike={toggleLike} hasLiked={hasLiked} />
                 </div>
                 <div className='absolute top-2 left-3 z-50'>
                     <PresenceDot member={member} />

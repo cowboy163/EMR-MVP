@@ -19,6 +19,11 @@ enum Role {
   PATIENT
 }
 
+enum TokenType {
+  VERIFICATION
+  PASSWORD_RESET
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String  @map("user_id")
@@ -127,4 +132,12 @@ model Patient {
   member         Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
   userId         String @unique
   user           User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Token {
+  id      String    @id @default(cuid())
+  email   String
+  token   String
+  expires DateTime
+  type    TokenType
 }
