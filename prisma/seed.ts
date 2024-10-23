@@ -28,6 +28,7 @@ async function insertSeedMembersData(data: SeedMemberDataType[], role: RoleType)
             passwordHash: await hash('password', 10),
             image: member.image,
             role,
+            profileComplete: true,
             member: {
                 create: {
                     dateOfBirth: new Date(member.dateOfBirth),

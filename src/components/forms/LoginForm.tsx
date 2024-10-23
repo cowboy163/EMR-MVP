@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
+import SocialLogin from '../SocialLogin'
 
 type Props = {
     rolePlatform?: RoleType
@@ -22,10 +23,10 @@ export default function LoginForm({ rolePlatform = 'PATIENT' }: Props) {
     const onSubmit = async (data: LoginSchema) => {
         const result = await signInUser(data, rolePlatform)
         if (result.status === 'success') {
-            if(rolePlatform === 'PATIENT') {
+            if (rolePlatform === 'PATIENT') {
                 router.push("/portal");
             }
-            if(rolePlatform === 'DOCTOR') {
+            if (rolePlatform === 'DOCTOR') {
                 router.push("/doctor-portal")
             }
             router.refresh();
@@ -56,6 +57,7 @@ export default function LoginForm({ rolePlatform = 'PATIENT' }: Props) {
                 <Button isDisabled={!isValid} fullWidth color='primary' type='submit' isLoading={isSubmitting}>
                     Login
                 </Button>
+                {rolePlatform === 'PATIENT' && <SocialLogin rolePlatform={rolePlatform} />}
                 <div
                     className='flex justify-center hover:underline text-sm'
                 >

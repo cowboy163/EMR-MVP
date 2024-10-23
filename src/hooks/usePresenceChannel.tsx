@@ -6,7 +6,7 @@ import { EVENT_ID_TYPES, EVENT_TYPES } from "@/types/eventTypes";
 import { Channel, Members } from "pusher-js";
 import { useCallback, useEffect, useRef } from "react";
 
-export const usePresenceChannel = () => {
+export const usePresenceChannel = (userId: string | null, profileComplete: boolean) => {
     const dispatch = useDispatch();
 
     const channelRef = useRef<Channel | null>(null);
@@ -24,6 +24,7 @@ export const usePresenceChannel = () => {
     }, [dispatch])
 
     useEffect(() => {
+        if (!userId || !profileComplete) return;
         if (!channelRef.current) {
             channelRef.current = pusherClient.subscribe(EVENT_ID_TYPES.PRESENCE);
 
@@ -49,5 +50,5 @@ export const usePresenceChannel = () => {
                 channelRef.current.unbind(EVENT_TYPES.MEMBER_REMOVE, handleRemoveMember);
             }
         }
-    }, [handleSetMembers, handleAddMember, handleRemoveMember])
+    }, [handleSetMembers, handleAddMember, handleRemoveMember, userId, profileComplete])
 }

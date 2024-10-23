@@ -12,7 +12,9 @@ export default auth((req) => {
     const isDoctorRoute = nextUrl.pathname.startsWith('/doctor-portal')
     
     const isDoctor = req.auth?.user.role === 'DOCTOR';
-    const isPatient = req.auth?.user.role === 'PATIENT';    
+    const isPatient = req.auth?.user.role === 'PATIENT';  
+    
+    const isProfileComplete = req.auth?.user.profileComplete;
 
     if (isPublicRoute) {
         return NextResponse.next()
@@ -36,6 +38,10 @@ export default auth((req) => {
 
     if ((isDoctorRoute && !isDoctor) || (isPatientRoute && !isPatient)) {
         return NextResponse.redirect(new URL('/', nextUrl));
+    }
+
+    if (isLoggedIn && !isProfileComplete && nextUrl.pathname !== '/complete-profile') {
+        return NextResponse.redirect(new URL('/complete-profile', nextUrl));
     }
 
     return NextResponse.next();
