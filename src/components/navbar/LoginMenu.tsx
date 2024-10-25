@@ -1,5 +1,7 @@
 import { FaPerson, FaUserDoctor } from "react-icons/fa6";
 import { DropdownWrapper, DropdownWrapperProps } from "../wrappers/DropdownWrapper";
+import { BiSolidClinic } from "react-icons/bi";
+import { RiAdminFill } from "react-icons/ri";
 
 
 const dropdownMenu:DropdownWrapperProps = {
@@ -20,6 +22,20 @@ const dropdownMenu:DropdownWrapperProps = {
                 href: '/doctor-login',
                 startContent: <FaUserDoctor size={32}/>,
                 description: "Doctor login"
+            },
+            {
+                ariaLabel: 'clinic login',
+                label: 'login',
+                href: '/clinic-login',
+                startContent: <BiSolidClinic size={32}/>,
+                description: "Clinic login"
+            },
+            {
+                ariaLabel: 'admin login',
+                label: 'login',
+                href: '/admin-login',
+                startContent: <RiAdminFill size={32}/>,
+                description: "Admin login"
             },
         ]
     }

@@ -19,13 +19,13 @@ export async function getUserInfoForNav() {
     }
 }
 
-export async function updateMemberProfile(data: MemberEditSchema, nameUpdated: boolean): Promise<ActionResult<Member>> {
+export async function updateSelfProfile(data: MemberEditSchema, nameUpdated: boolean): Promise<ActionResult<Member>> {
     try {
         const userId = await getAuthUserId();
         const validated = memberEditSchema.safeParse(data)
-        if(!validated.success) return {status: 'error', error: validated.error.errors}
+        if (!validated.success) return { status: 'error', error: validated.error.errors }
 
-        const {name, description, city, country} = validated.data
+        const { name, description, city, country } = validated.data
 
         if (nameUpdated) {
             await prisma.user.update({
@@ -35,7 +35,7 @@ export async function updateMemberProfile(data: MemberEditSchema, nameUpdated: b
         }
 
         const member = await prisma.member.update({
-            where: {userId},
+            where: { userId },
             data: {
                 name,
                 description,
@@ -43,19 +43,35 @@ export async function updateMemberProfile(data: MemberEditSchema, nameUpdated: b
                 country
             }
         })
-        return {status: 'success', data: member}
+
+        return { status: 'success', data: member }
     } catch (error) {
         console.log(error);
-        return {status: 'error', error: 'Something went wrong'}
+        return { status: 'error', error: 'Something went wrong' }
     }
 }
+
+export async function updateMemberProfile(data: MemberEditSchema, nameUpdated?: boolean, targetId?: string): Promise<ActionResult<Member>> {
+        const editSelf = !!nameUpdated && !targetId;
+        if(editSelf) {
+            
+        }
+
+        
+    } catch (error) {
+        console.log(error);
+        return { status: 'error', error: 'Something went wrong' }
+    }
+}
+
+
 
 export async function addImage(url: string, publicId: string) {
     try {
         const userId = await getAuthUserId();
 
         return prisma.member.update({
-            where: {userId},
+            where: { userId },
             data: {
                 photos: {
                     create: [
@@ -99,17 +115,29 @@ export async function setMainImage(photo: Photo) {
     try {
         const userId = await getAuthUserId();
         await prisma.user.update({
-            where: {id: userId},
-            data: {image: photo.url}
+            where: { id: userId },
+            data: { image: photo.url }
         })
 
         return prisma.member.update({
-            where: {userId},
-            data: {image: photo.url}
+            where: { userId },
+            data: { image: photo.url }
         })
     } catch (error) {
         console.log(error)
         throw error
+    }
+}
+
+// admin use only, dev only
+export async function deleteUser(userId: string) {
+    try {
+        await prisma.$transaction(async tx => {
+            await tx.user.deleteMany({ where: { id: userId } })
+        });
+    } catch (error) {
+        console.error("Error deleting user: ", error);
+        throw error;
     }
 }
 
