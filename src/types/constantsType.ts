@@ -1,4 +1,4 @@
-export type RoleType = 'DOCTOR' | 'PATIENT'
+export type RoleType = 'ADMIN' | 'CLINIC' | 'DOCTOR' | 'PATIENT'
 
 export type GenderType = 'male' | 'female'
 

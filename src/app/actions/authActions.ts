@@ -4,7 +4,7 @@ import { auth, signIn, signOut } from "@/auth";
 import { sendPasswordResetEmail, sendVerificationEmail } from "@/lib/mail";
 import { prisma } from "@/lib/prisma"
 import { LoginSchema } from "@/lib/schemas/loginSchema";
-import { DoctorProfileSchema, doctorRegisterSchema, DoctorRegisterSchema, PatientProfileSchema, patientRegisterSchema, PatientRegisterSchema } from "@/lib/schemas/registerSchema";
+import { adminRegisterSchema, AdminRegisterSchema, DoctorProfileSchema, doctorRegisterSchema, DoctorRegisterSchema, PatientProfileSchema, patientRegisterSchema, PatientRegisterSchema } from "@/lib/schemas/registerSchema";
 import { generateToken, getTokenByToken } from "@/lib/tokens";
 import { ActionResult } from "@/types";
 import { RoleType } from "@/types/constantsType";
@@ -193,12 +193,68 @@ async function registerDoctor(data: DoctorRegisterSchema): Promise<ActionResult<
     }
 }
 
-export async function registerUser(data: PatientRegisterSchema | DoctorRegisterSchema, rolePlatform: RoleType = 'PATIENT'): Promise<ActionResult<User>> {
+async function registerAdmin(data: AdminRegisterSchema): Promise<ActionResult<User>> {
+    try {
+        const validated = adminRegisterSchema.safeParse(data);
+
+        if (!validated.success) {
+            return { status: "error", error: validated.error.errors }
+        }
+
+        if (process.env.NOQCLINIC_ADMIN_SECRET_KEY !== validated.data.secretKey) {
+            return { status: "error", error: "Invalid Credential" }
+        }
+
+        const { name, email, password, gender, description, dateOfBirth, city, country } = validated.data;
+        const hashedPassword = await bcrypt.hash(password, 10)
+
+        const existingUser = await prisma.user.findUnique({
+            where: { email }
+        });
+
+        if (existingUser) return { status: "error", error: "User already exist" };
+
+        const user = await prisma.user.create({
+            data: {
+                name,
+                email,
+                passwordHash: hashedPassword,
+                role: 'ADMIN',
+                profileComplete: true,
+                member: {
+                    create: {
+                        name,
+                        description,
+                        city,
+                        country,
+                        dateOfBirth: new Date(dateOfBirth),
+                        gender,
+                        role: 'ADMIN',
+                    }
+                }
+            }
+        })
+
+        if (process.env.RESEND_EMAIL_VERIFICATION_SERVICE === "true") {
+            const verificationToken = await generateToken(email, TokenType.VERIFICATION);
+            // Send email
+            await sendVerificationEmail(verificationToken.email, verificationToken.token);
+        }
+        return { status: 'success', data: user }
+    } catch (error) {
+        console.log(error);
+        return { status: 'error', error: "Something went wrong" };
+    }
+}
+
+export async function registerUser(data: PatientRegisterSchema | DoctorRegisterSchema | AdminRegisterSchema, rolePlatform: RoleType = 'PATIENT'): Promise<ActionResult<User>> {
     switch (rolePlatform) {
         case "DOCTOR":
             return registerDoctor(data as DoctorRegisterSchema);
         case "PATIENT":
             return registerPatient(data as PatientRegisterSchema);
+        case "ADMIN":
+            return registerAdmin(data as AdminRegisterSchema);
         default:
             console.log("rolePlatform is undefined in registerUser");
             return { status: 'error', error: "Something went wrong" };

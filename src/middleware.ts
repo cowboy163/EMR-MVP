@@ -3,43 +3,63 @@ import { auth } from "./auth";
 import { authRoutes, publicRoutes } from "./routes";
 
 export default auth((req) => {
-    const {nextUrl} = req;
-    const isLoggedIn = !!req.auth;
+    const { nextUrl, auth } = req;
+    const isLoggedIn = !!auth;
 
+    // route prefix check
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname)
     const isAuthRoute = authRoutes.includes(nextUrl.pathname)
-    const isPatientRoute = nextUrl.pathname.startsWith('/portal')
-    const isDoctorRoute = nextUrl.pathname.startsWith('/doctor-portal')
-    
-    const isDoctor = req.auth?.user.role === 'DOCTOR';
-    const isPatient = req.auth?.user.role === 'PATIENT';  
-    
+    const routePrefix = nextUrl.pathname.split('/')[1];
+
+    // role check
+    const userRole = auth?.user.role;
+    const isRoleRoute = {
+        DOCTOR: routePrefix === 'doctor-portal',
+        PATIENT: routePrefix === 'portal',
+        ADMIN: routePrefix === 'admin-portal',
+        CLINIC: routePrefix === 'clinic-portal'
+    };
+
     const isProfileComplete = req.auth?.user.profileComplete;
 
+    // public route
     if (isPublicRoute) {
         return NextResponse.next()
     }
 
+    // auth route
+    // redirect to user's own role's portal after login
     if (isAuthRoute) {
-        if(isLoggedIn) {
-            if(isDoctor) return NextResponse.redirect(new URL('/doctor-portal', nextUrl))
-            if(isPatient) return NextResponse.redirect(new URL('/portal', nextUrl))            
+        if (isLoggedIn && userRole) {
+            const redirectUrl = {
+                DOCTOR: '/doctor-portal',
+                PATIENT: '/portal',
+                ADMIN: '/admin-portal',
+                CLINIC: '/clinic-portal'
+            }[userRole];
+            if (redirectUrl) return NextResponse.redirect(new URL(redirectUrl, nextUrl));
         }
         return NextResponse.next()
     }
 
-    if (isDoctorRoute && !isLoggedIn) {
-        return NextResponse.redirect(new URL('/doctor-login', nextUrl))
+    // Access control for role-specific routes
+    // not login, and use role routes will redirect to login
+    if (!isLoggedIn) {
+        const loginUrl = {
+            'doctor-portal': '/doctor-login',
+            'portal': '/login',
+            'admin-portal': '/admin-login',
+            'clinic-portal': '/clinic-login'
+        }[routePrefix];
+        return loginUrl ? NextResponse.redirect(new URL(loginUrl, nextUrl)) : NextResponse.next();
     }
 
-    if (isPatientRoute && !isLoggedIn) {
-        return NextResponse.redirect(new URL('/login', nextUrl))
+    // Accessing routes of other roles will redirect homepage 
+    if (isLoggedIn && !isRoleRoute[userRole!]) {
+        return NextResponse.redirect(new URL("/", nextUrl));
     }
 
-    if ((isDoctorRoute && !isDoctor) || (isPatientRoute && !isPatient)) {
-        return NextResponse.redirect(new URL('/', nextUrl));
-    }
-
+    // if profile is unfinished, redirect to finish profile page
     if (isLoggedIn && !isProfileComplete && nextUrl.pathname !== '/complete-profile') {
         return NextResponse.redirect(new URL('/complete-profile', nextUrl));
     }

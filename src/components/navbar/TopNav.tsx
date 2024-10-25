@@ -9,47 +9,104 @@ import { getUserInfoForNav } from '@/app/actions/userActions'
 import LoginMenu from './LoginMenu';
 import RegisterMenu from './RegisterMenu';
 import FiltersWrapper from '../filters/FilterWrapper';
+import { RoleType } from '@/types/constantsType';
+
+
+type LinkType = {
+    href: string,
+    label: string
+}
+const patientLinks:LinkType[] = [
+    {
+        href: '/portal',
+        label: 'Home'
+    },
+    {
+        href: '/portal/doctors',
+        label: 'Doctors'
+    },
+    {
+        href: '/portal/saved-doctors',
+        label: 'Saved Doctors'
+    },
+    {
+        href: '/portal/messages',
+        label: 'Messages'
+    },
+]
+
+const doctorLinks:LinkType[] = [
+    {
+        href: '/doctor-portal',
+        label: 'Home'
+    },
+    {
+        href: '/doctor-portal/saved-patients',
+        label: 'Saved Patients'
+    },
+    {
+        href: '/doctor-portal/messages',
+        label: 'Messages'
+    },
+]
+
+const adminLinks:LinkType[] = [
+    {
+        href: '/admin-portal',
+        label: 'Home'
+    },
+    {
+        href: '/admin-portal/members',
+        label: 'Members'
+    },
+    {
+        href: '/admin-portal/clinics',
+        label: 'Clinics'
+    },
+    {
+        href: '/admin-portal/messages',
+        label: 'Messages'
+    },
+]
+
+const clinicLinks:LinkType[] = [
+    {
+        href: '/clinic-portal',
+        label: 'Home'
+    },
+    {
+        href: '/clinic-portal/members',
+        label: 'Members'
+    },
+    {
+        href: '/clinic-portal/messages',
+        label: 'Messages'
+    },
+]
+
+const getLinks = (role: RoleType):LinkType[] => {
+    switch (role) {
+        case 'ADMIN':
+            return adminLinks;
+        case 'CLINIC':
+            return clinicLinks;
+        case 'DOCTOR':
+            return doctorLinks;
+        case 'PATIENT':
+            return patientLinks;
+        default:
+            return [];
+    }
+}
 
 export default async function TopNav() {
     const session = await auth();
     const userInfo = session?.user && await getUserInfoForNav();
-
-
-    const patientLinks = [
-        {
-            href: '/portal',
-            label: 'Home'
-        },
-        {
-            href: '/portal/doctors',
-            label: 'Doctors'
-        },
-        {
-            href: '/portal/saved-doctors',
-            label: 'Saved Doctors'
-        },
-        {
-            href: '/portal/messages',
-            label: 'Messages'
-        },
-    ]
-
-    const doctorLinks = [
-        {
-            href: '/doctor-portal',
-            label: 'Home'
-        },
-        {
-            href: '/doctor-portal/saved-patients',
-            label: 'Saved Patients'
-        },
-        {
-            href: '/doctor-portal/messages',
-            label: 'Messages'
-        },
-    ]
-
-    const links = session?.user.role === 'DOCTOR' ? doctorLinks : patientLinks;
+    let links:LinkType[] = [];
+    const role = session?.user.role;
+    if (role) {
+        links = getLinks(session?.user.role);
+    }
 
     return (
         <>
@@ -92,7 +149,7 @@ export default async function TopNav() {
                     }
                 </NavbarContent>
             </Navbar>
-            <FiltersWrapper/>
+            <FiltersWrapper />
         </>
     )
 }

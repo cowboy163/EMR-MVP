@@ -33,10 +33,16 @@ export const doctorProfileSchema = z.object({
     field: z.string().min(1)
 })
 
+export const adminProfileSchema = z.object({
+    secretKey: z.string().min(1)
+})
+
 const combinedRegisterSchema = registerSchema.and(memberProfileSchema);
 export const patientRegisterSchema = combinedRegisterSchema.and(patientProfileSchema);
 export const doctorRegisterSchema = combinedRegisterSchema.and(doctorProfileSchema);
+export const adminRegisterSchema = combinedRegisterSchema.and(adminProfileSchema);
 export type PatientRegisterSchema = z.infer<typeof registerSchema & typeof memberProfileSchema & typeof patientProfileSchema>;
 export type DoctorRegisterSchema = z.infer<typeof registerSchema & typeof memberProfileSchema & typeof doctorProfileSchema>;
+export type AdminRegisterSchema = z.infer<typeof registerSchema & typeof memberProfileSchema & typeof adminProfileSchema>;
 export type PatientProfileSchema = z.infer<typeof memberProfileSchema & typeof patientProfileSchema>;
 export type DoctorProfileSchema = z.infer<typeof memberProfileSchema & typeof doctorProfileSchema>;
