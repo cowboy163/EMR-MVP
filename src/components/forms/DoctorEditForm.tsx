@@ -11,10 +11,11 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
 type Props = {
-    member: Member
+    member: Member,
+    selfEdit?: boolean,
 }
 
-export default function DoctorEditForm({ member }: Props) {
+export default function DoctorEditForm({ member, selfEdit = true }: Props) {
     const router = useRouter();
     const { register, handleSubmit, setError, reset, formState: { isValid, isDirty, isSubmitting, errors } } = useForm<MemberEditSchema>({
         resolver: zodResolver(memberEditSchema),
@@ -34,7 +35,12 @@ export default function DoctorEditForm({ member }: Props) {
 
     const onSubmit = async (data: MemberEditSchema) => {
         const nameUpdated = data.name !== member.name;
-        const result = await updateMemberProfile(data, nameUpdated, member.userId);
+        let result = undefined;
+        if (selfEdit) {
+            result = await updateMemberProfile(data, nameUpdated);
+        } else {
+            result = await updateMemberProfile(data, false, member.userId)
+        }
         if (result.status === 'success') {
             toast.success("Profile updated")
             router.refresh();
