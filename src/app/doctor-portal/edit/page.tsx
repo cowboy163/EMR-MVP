@@ -3,7 +3,7 @@ import React from 'react'
 import { notFound } from 'next/navigation';
 import { getAuthUserId } from '@/app/actions/authActions';
 import { getMemberByUserId } from '@/app/actions/memberActions';
-import DoctorEditForm from '@/components/forms/DoctorEditForm';
+import MemberEditForm from '@/components/forms/MemberEditForm';
 
 export default async function DoctorEditPage() {
   const userId = await getAuthUserId();
@@ -16,7 +16,7 @@ export default async function DoctorEditPage() {
           </CardHeader>
           <Divider />
           <CardBody>
-              <DoctorEditForm member={member} />
+              <MemberEditForm member={member}/>
           </CardBody>
       </>
   )

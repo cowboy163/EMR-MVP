@@ -12,9 +12,10 @@ type Props = {
     photos: Photo[] | null;
     editing?: boolean;
     mainImageUrl?: string | null;
+    targetId?: string
 }
 
-export default function MemberPhotos({ photos, editing, mainImageUrl }: Props) {
+export default function MemberPhotos({ photos, editing, mainImageUrl, targetId }: Props) {
     const router = useRouter()
     const [loading, setLoading] = useState({
         type: '',
@@ -25,7 +26,7 @@ export default function MemberPhotos({ photos, editing, mainImageUrl }: Props) {
     const onSetMain = async (photo: Photo) => {
         if (photo.url === mainImageUrl) return null;
         setLoading({ isLoading: true, id: photo.id, type: 'main' })
-        await setMainImage(photo);
+        await setMainImage(photo, targetId);
         router.refresh()
         setLoading({ isLoading: false, id: '', type: '' })
     }
@@ -33,7 +34,7 @@ export default function MemberPhotos({ photos, editing, mainImageUrl }: Props) {
     const onDelete = async (photo: Photo) => {
         if (photo.url === mainImageUrl) return null;
         setLoading({ isLoading: true, id: photo.id, type: 'delete' });
-        await deleteImage(photo);
+        await deleteImage(photo, targetId);
         router.refresh();
         setLoading({ isLoading: false, id: '', type: '' })
     }

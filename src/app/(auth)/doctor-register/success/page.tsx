@@ -5,8 +5,7 @@ import { useRouter } from 'next/navigation'
 import React from 'react'
 import { FaCheckCircle } from 'react-icons/fa';
 
-// 注册成功后的消息Card
-export default function RegisterSuccessPage() {
+export default function DoctorRegisterSuccessPage() {
     const router = useRouter();
     return (
         <CardWrapper

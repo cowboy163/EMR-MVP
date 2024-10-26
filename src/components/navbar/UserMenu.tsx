@@ -1,6 +1,6 @@
 'use client';
 import { signOutUser } from '@/app/actions/authActions';
-import { transformImageUrl } from '@/lib/util';
+import { getBaseLinkBasedOnRolePlatform, transformImageUrl } from '@/lib/util';
 import { RoleType } from '@/types/constantsType';
 import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from '@nextui-org/react'
 import Link from 'next/link'
@@ -9,15 +9,6 @@ import React from 'react'
 type Props = {
     userInfo: { name: string | null; image: string | null; } | null | undefined
     rolePlatform: RoleType
-}
-
-const getLinkBasedOnRolePlatform = (rolePlatform: RoleType) => {
-    if (rolePlatform === 'PATIENT') {
-        return `/portal`
-    }
-    if (rolePlatform === 'DOCTOR') {
-        return `/doctor-portal`
-    }
 }
 
 export default function UserMenu({ userInfo, rolePlatform }: Props) {
@@ -41,7 +32,7 @@ export default function UserMenu({ userInfo, rolePlatform }: Props) {
                     </DropdownItem>
                 </DropdownSection>
 
-                <DropdownItem as={Link} href={`${getLinkBasedOnRolePlatform(rolePlatform)}/edit`}>
+                <DropdownItem as={Link} href={`${getBaseLinkBasedOnRolePlatform(rolePlatform)}/edit`}>
                     Edit profile
                 </DropdownItem>
                 <DropdownItem color='danger' onClick={async () => await signOutUser()}>

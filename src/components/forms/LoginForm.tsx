@@ -10,6 +10,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import SocialLogin from '../SocialLogin'
+import { getBaseLinkBasedOnRolePlatform } from '@/lib/util'
 
 type Props = {
     rolePlatform?: RoleType
@@ -23,12 +24,7 @@ export default function LoginForm({ rolePlatform = 'PATIENT' }: Props) {
     const onSubmit = async (data: LoginSchema) => {
         const result = await signInUser(data, rolePlatform)
         if (result.status === 'success') {
-            if (rolePlatform === 'PATIENT') {
-                router.push("/portal");
-            }
-            if (rolePlatform === 'DOCTOR') {
-                router.push("/doctor-portal")
-            }
+            router.push(getBaseLinkBasedOnRolePlatform(rolePlatform));
             router.refresh();
         } else {
             toast.error(result.error as string)

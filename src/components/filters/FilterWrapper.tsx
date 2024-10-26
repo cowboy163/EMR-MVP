@@ -7,6 +7,6 @@ import Filters from './Filters';
 export default function FiltersWrapper() {
     const pathname = usePathname();
 
-    if(pathname.endsWith('/doctors')) return <Filters />
+    if(pathname.endsWith('/doctors') || pathname.endsWith('/members')) return <Filters />
     else return null;
 }

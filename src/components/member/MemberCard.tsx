@@ -1,10 +1,10 @@
 'use client'
 import { toggleLikeMember } from '@/app/actions/likeActions'
-import { calculateAge, getBaseLinkBasedOnRolePlatform, transformImageUrl } from '@/lib/util'
+import { calculateAge, getMemberLinkBasedOnRolePlatform, transformImageUrl } from '@/lib/util'
 import { Card, CardFooter, Image } from '@nextui-org/react'
 import { Member } from '@prisma/client'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 import LikeButton from '../buttons/LikeButton'
 import PresenceDot from '../presence/PresenceDot'
 import { RoleType } from '@/types/constantsType'
@@ -12,18 +12,15 @@ import { RoleType } from '@/types/constantsType'
 type Props = {
     member: Member,
     likeIds: string[],
-    rolePlatform: RoleType
+    rolePlatform: RoleType,
+    customizedButton?: ReactNode
 }
 
-export default function MemberCard({ member, likeIds, rolePlatform }: Props) {
+export default function MemberCard({ member, likeIds, rolePlatform, customizedButton }: Props) {
     const [hasLiked, setHasLiked] = useState(likeIds?.includes(member.userId));
     const [loading, setLoading] = useState(false);
 
-    const baseLink = getBaseLinkBasedOnRolePlatform(rolePlatform);
-    const getLink = () => {
-        if (rolePlatform === 'PATIENT') return `${baseLink}/doctors/${member.userId}`;
-        if (rolePlatform === 'DOCTOR') return `${baseLink}/members/${member.userId}`;
-    }
+    const memberLink = `${getMemberLinkBasedOnRolePlatform(rolePlatform)}/${member.userId}`
 
     async function toggleLike() {
         try {
@@ -46,7 +43,7 @@ export default function MemberCard({ member, likeIds, rolePlatform }: Props) {
         <Card
             fullWidth
             as={Link}
-            href={getLink()}
+            href={memberLink}
             isPressable
         >
             <Image
@@ -58,7 +55,7 @@ export default function MemberCard({ member, likeIds, rolePlatform }: Props) {
             />
             <div onClick={preventLinkAction}>
                 <div className='absolute top-3 right-3 z-50'>
-                    <LikeButton loading={loading} toggleLike={toggleLike} hasLiked={hasLiked} />
+                    {customizedButton ? customizedButton : <LikeButton loading={loading} toggleLike={toggleLike} hasLiked={hasLiked} />}
                 </div>
                 <div className='absolute top-2 left-3 z-50'>
                     <PresenceDot member={member} />
