@@ -6,12 +6,12 @@ import { Card } from '@nextui-org/react';
 import { notFound } from 'next/navigation';
 import React, { ReactNode } from 'react'
 
-export default async function Layout({ children }: { children: ReactNode }) {
+export default async function AdminEditLayout({ children }: { children: ReactNode }) {
     const userId = await getAuthUserId();
     const member = await getMemberByUserId({ userId });
     if (!member) return notFound();
 
-    const basePath = `${getBaseLinkBasedOnRolePlatform('DOCTOR')}/edit`
+    const basePath = `${getBaseLinkBasedOnRolePlatform('ADMIN')}/edit`
 
     const navLinks = [
         { name: "Edit Profile", href: `${basePath}` },

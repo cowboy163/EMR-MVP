@@ -54,6 +54,7 @@ An online platform for doctors to manage appointments, handle medical records, a
    # env
    NODE_ENV="development"
    NEXT_PUBLIC_BASE_URL="http://localhost:3000"
+   NOQCLINIC_ADMIN_SECRET_KEY="Jurong@2024"
    
    # Database
    DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
@@ -85,7 +86,15 @@ An online platform for doctors to manage appointments, handle medical records, a
 
    Replace the placeholder values with your actual credentials.
 
-3. **Run the development server**
+3. **Generate prisma client**
+
+   ~~~bash
+   $ npx prisma generate
+   ~~~
+
+   
+
+4. **Run the development server**
 
    ```bash
    $ npm run dev
@@ -93,7 +102,7 @@ An online platform for doctors to manage appointments, handle medical records, a
    $ yarn dev
    ```
 
-4. **Access the application**
+5. **Access the application**
 
    Open http://localhost:3000 in your browser.
 
@@ -194,6 +203,19 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
 ## Changelog
+
+### 2024-10-26
+
+###### v0.0.2
+
+- admin portal structure done
+  - admin edit other member's file
+  - admin edit other member's photos
+  - admin delete other users
+  - admin chat with other user
+  - admin check messages
+  - admin edit their own file
+  - admin edit their own photos
 
 ### 2024-10-23
 

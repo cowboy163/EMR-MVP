@@ -14,8 +14,8 @@ export default async function Layout({ children, params }: { children: ReactNode
     const basePath = `${getMemberLinkBasedOnRolePlatform('ADMIN')}/${member.userId}`;
 
     const navLinks = [
-        { name: "Profile", href: `${basePath}` },
-        { name: "Photos", href: `${basePath}/photos` },
+        { name: "Edit Member", href: `${basePath}` },
+        { name: "Edit Photos", href: `${basePath}/photos` },
         { name: "Chat", href: `${basePath}/chat` }
     ]
     return (
