@@ -1,4 +1,4 @@
-# noqclinic-mvp
+# EMR-template-mvp
 
 An online platform for doctors to manage appointments, handle medical records, and reduce paperwork.
 
@@ -182,15 +182,6 @@ $ npx prisma migrate reset --skip-seed
 - **Pusher**
 - **Resend**
 - **Google OAuth**
-
-
-
-## Author
-
-- Jurong
-- Rohan
-- Leo
-- Lu
 
 ## Acknowledgments
 
