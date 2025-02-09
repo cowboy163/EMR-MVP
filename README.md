@@ -18,7 +18,7 @@ An online platform for doctors to manage appointments, handle medical records, a
 
 ## Introduction
 
-**noqclinic-mvp** is a web application designed to streamline the workflow of medical professionals by providing tools for patient appointments, medical record management, and minimizing administrative tasks.
+**emr-sample** is a web application designed to streamline the workflow of medical professionals by providing tools for patient appointments, medical record management, and minimizing administrative tasks.
 
 ## Features
 
@@ -192,35 +192,4 @@ $ npx prisma migrate reset --skip-seed
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
-## Changelog
-
-### 2024-10-26
-
-###### v0.0.2
-
-- admin portal structure done
-  - admin edit other member's file
-  - admin edit other member's photos
-  - admin delete other users
-  - admin chat with other user
-  - admin check messages
-  - admin edit their own file
-  - admin edit their own photos
-
-### 2024-10-23
-
-###### v0.0.1
-
-- Framework setup completed
-- Patient and doctor registration and login
-- Patient login with google (add google email before testing)
-- Patients can view the list of doctors
-- Patients and doctors can edit personal information
-- Patients and doctors can upload images and set avatars
-- Real-time chat between patients and doctors
-- Real-time online status of patients and doctors
-- Message history between patients and doctors
-- Email verification for patients and doctors
-- Password recovery for patients and doctors
 
